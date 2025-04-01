@@ -58,9 +58,16 @@ namespace EventsWebApp.Infrastructure.Repositories
             };
         }
 
-        public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<T> GetByIdAsync(Guid id, Func<IQueryable<T>, IQueryable<T>> includeProperties = null, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(new object?[] { id }, cancellationToken);
+            IQueryable<T> query = _dbSet;
+
+            if (includeProperties != null)
+            {
+                query = includeProperties(query);
+            }
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
         }
 
         public async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default)

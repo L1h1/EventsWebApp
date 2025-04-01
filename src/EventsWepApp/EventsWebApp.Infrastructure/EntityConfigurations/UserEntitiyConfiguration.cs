@@ -21,6 +21,7 @@ namespace EventsWebApp.Infrastructure.EntityConfigurations
             builder.Property(u => u.FirstName).IsRequired().HasMaxLength(64);
             builder.Property(u=>u.LastName).IsRequired().HasMaxLength(64);
             builder.Property(u => u.Email).IsRequired();
+            builder.Property(u => u.Password).IsRequired();
             builder.Property(u => u.Role).IsRequired();
             builder.Property(u=>u.DateOfBirth).IsRequired();
         }

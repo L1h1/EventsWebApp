@@ -10,5 +10,10 @@ namespace EventsWebApp.Domain.Interfaces
     public interface IEventRepository : IBaseRepository<Event>
     {
         Task<Event> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Event>> GetByFilterAsync(
+            DateTime? eventDateAndTime = null,
+            string eventAddress = null,
+            Guid? eventCategoryId = null,
+            CancellationToken cancellationToken = default);
     }
 }

@@ -1,21 +1,18 @@
-﻿using EventsWebApp.Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventsWebApp.Domain.Entities
+namespace EventsWebApp.Application.DTOs
 {
-    public class User
+    public class EventParticipantResponseDTO
     {
         public Guid Id { get; set; }
-        public UserRole Role { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateOnly DateOfBirth { get; set; }
+        public DateOnly RegistrationDate { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public IEnumerable<EventParticipant> EventParticipations { get; set; }
     }
 }
