@@ -16,6 +16,7 @@ namespace EventsWebApp.Infrastructure.EntityConfigurations
             builder.HasKey(e => e.Id);
 
             builder.HasIndex(e => e.Id).IsUnique();
+            builder.HasIndex(e => e.Name).IsUnique();
 
             builder.HasMany(e => e.Participants)
                 .WithOne(p => p.Event)

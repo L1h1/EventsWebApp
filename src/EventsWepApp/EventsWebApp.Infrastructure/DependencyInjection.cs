@@ -1,4 +1,6 @@
-﻿using EventsWebApp.Infrastructure.Data;
+﻿using EventsWebApp.Domain.Interfaces;
+using EventsWebApp.Infrastructure.Data;
+using EventsWebApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +24,10 @@ namespace EventsWebApp.Infrastructure
             var options = new DbContextOptionsBuilder<AppDbContext>().UseSqlite(connStr).Options;
             
             services.AddScoped<AppDbContext>(s => new AppDbContext(options));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();
+            services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 
             return services;
         }

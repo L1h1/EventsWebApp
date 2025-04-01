@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EventsWebApp.Domain\EventsWebApp.Domain.csproj" />
   </ItemGroup>
 
