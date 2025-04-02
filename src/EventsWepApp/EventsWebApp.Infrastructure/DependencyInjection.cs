@@ -1,6 +1,7 @@
 ﻿using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Infrastructure.Data;
 using EventsWebApp.Infrastructure.Repositories;
+using EventsWebApp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace EventsWebApp.Infrastructure
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();
             services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
+            services.AddTransient<IPhotoService,PhotoService>();
 
             return services;
         }
