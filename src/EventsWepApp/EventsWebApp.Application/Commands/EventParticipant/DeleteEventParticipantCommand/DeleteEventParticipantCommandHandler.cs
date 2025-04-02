@@ -1,4 +1,5 @@
-﻿using EventsWebApp.Domain.Interfaces;
+﻿using EventsWebApp.Application.Exceptions;
+using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
 using System;
@@ -29,6 +30,12 @@ namespace EventsWebApp.Application.Commands.EventParticipant.DeleteEventParticip
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            var existingEventParticipant = await _eventParticipantRepository.GetByIdAsync(request.id, cancellationToken: cancellationToken);
+            if (existingEventParticipant == null)
+            {
+                throw new NotFoundException("Event participant with given Id does not exist");
             }
 
             await _eventParticipantRepository.DeleteAsync(request.id, cancellationToken);

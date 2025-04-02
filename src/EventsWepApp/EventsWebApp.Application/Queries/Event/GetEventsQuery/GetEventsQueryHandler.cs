@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Shared.DTO;
 using FluentValidation;
@@ -41,6 +42,11 @@ namespace EventsWebApp.Application.Queries.Event.GetEventsQuery
                 query=>query.Include(e=>e.EventCategory),
                 cancellationToken
                 );
+
+            if(!paginatedData.Items.Any())
+            {
+                throw new NotFoundException("No events found");
+            }
 
             var mappedData = _mapper.Map<IEnumerable<EventResponseDTO>>(paginatedData.Items);
 

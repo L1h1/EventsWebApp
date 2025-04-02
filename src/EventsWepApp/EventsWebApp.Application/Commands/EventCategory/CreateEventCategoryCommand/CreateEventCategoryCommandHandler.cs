@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
@@ -35,6 +36,12 @@ namespace EventsWebApp.Application.Commands.EventCategory.CreateEventCategoryCom
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            var existingCategory = _eventCategoryRepository.GetByNameAsync(request.name, cancellationToken);
+            if (existingCategory != null)
+            {
+                throw new BadRequestException("Event category with given name already exists.");
             }
 
             var newCategory = new Domain.Entities.EventCategory

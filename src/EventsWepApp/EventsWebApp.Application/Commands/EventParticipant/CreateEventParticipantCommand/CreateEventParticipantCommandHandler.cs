@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
@@ -16,16 +17,22 @@ namespace EventsWebApp.Application.Commands.EventParticipant.CreateEventParticip
     {
         private readonly IMapper _mapper;
         private readonly IValidator<CreateEventParticipantCommand> _validator;
+        private readonly IUserRepository _userRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IEventParticipantRepository _eventParticipantRepository;
 
         public CreateEventParticipantCommandHandler(
-            IMapper mapper, 
+            IMapper mapper,
             IEventParticipantRepository eventParticipantRepository,
-            IValidator<CreateEventParticipantCommand> validator)
+            IValidator<CreateEventParticipantCommand> validator,
+            IEventRepository eventRepository,
+            IUserRepository userRepository)
         {
             _mapper = mapper;
             _validator = validator;
             _eventParticipantRepository = eventParticipantRepository;
+            _userRepository = userRepository;
+            _eventRepository = eventRepository;
         }
 
         public async Task<EventParticipantResponseDTO> Handle(CreateEventParticipantCommand request, CancellationToken cancellationToken)
@@ -35,6 +42,18 @@ namespace EventsWebApp.Application.Commands.EventParticipant.CreateEventParticip
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            var existingEvent = await _eventRepository.GetByIdAsync(request.requestDTO.EventId, cancellationToken: cancellationToken);
+            if (existingEvent == null)
+            {
+                throw new NotFoundException("Event with given Id does not exist.");
+            }
+
+            var exstingUser = await _userRepository.GetByIdAsync(request.requestDTO.UserId, cancellationToken: cancellationToken);
+            if(exstingUser == null)
+            {
+                throw new NotFoundException("User with given Id does not exist.");
             }
 
             var newParticipant = _mapper.Map<Domain.Entities.EventParticipant>(request.requestDTO);

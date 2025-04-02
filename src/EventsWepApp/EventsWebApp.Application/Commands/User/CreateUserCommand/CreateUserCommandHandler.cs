@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
@@ -35,6 +36,12 @@ namespace EventsWebApp.Application.Commands.User.CreateUserCommand
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            var existingUser = await _userRepository.GetByEmailAsync(request.requestDTO.Email, cancellationToken: cancellationToken);
+            if(existingUser != null)
+            {
+                throw new BadRequestException("User with given email already exists");
             }
 
             var newUser = _mapper.Map<Domain.Entities.User>(request.requestDTO);

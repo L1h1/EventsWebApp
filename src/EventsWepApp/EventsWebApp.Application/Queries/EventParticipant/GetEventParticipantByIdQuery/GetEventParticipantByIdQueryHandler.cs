@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -40,6 +41,11 @@ namespace EventsWebApp.Application.Queries.EventParticipant.GetEventParticipantB
                 query => query.Include(p => p.User),
                 cancellationToken
                 );
+
+            if (requestedParticipant == null)
+            {
+                throw new NotFoundException("Event participant with given Id does not exist.");
+            }
 
             return _mapper.Map<EventParticipantResponseDTO>(requestedParticipant);
         }

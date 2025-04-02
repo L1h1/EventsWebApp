@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Shared.DTO;
 using FluentValidation;
@@ -39,6 +40,11 @@ namespace EventsWebApp.Application.Queries.User.GetUsersQuery
                 request.pageSize,
                 cancellationToken: cancellationToken
                 );
+
+            if(!paginatedData.Items.Any())
+            {
+                throw new NotFoundException("No users found");
+            }
 
             var mappedData = _mapper.Map<IEnumerable<UserResponseDTO>>( paginatedData.Items );
 

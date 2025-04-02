@@ -1,4 +1,5 @@
-﻿using EventsWebApp.Domain.Interfaces;
+﻿using EventsWebApp.Application.Exceptions;
+using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
 using System;
@@ -29,6 +30,12 @@ namespace EventsWebApp.Application.Commands.EventCategory.DeleteEventCategoryCom
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
+            }
+
+            var existinigCategory = await _eventCategoryRepository.GetByIdAsync(request.id, cancellationToken: cancellationToken);
+            if (existinigCategory == null)
+            {
+                throw new NotFoundException("Event category with given Id does not exist");
             }
 
             await _eventCategoryRepository.DeleteAsync(request.id);

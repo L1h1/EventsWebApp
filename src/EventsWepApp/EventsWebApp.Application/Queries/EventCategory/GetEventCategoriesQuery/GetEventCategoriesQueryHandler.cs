@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -38,6 +39,11 @@ namespace EventsWebApp.Application.Queries.EventCategory.GetEventCategoriesQuery
                 request.pageSize,
                 cancellationToken: cancellationToken
                 );
+
+            if(!rawData.Items.Any())
+            {
+                throw new NotFoundException("No event categories found.");
+            }
 
             return _mapper.Map<IEnumerable<EventCategoryResponseDTO>>(rawData.Items);
         }

@@ -47,9 +47,9 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpGet("filtered")]
-        public async Task<IActionResult> GetEventsByFilter([FromQuery] EventFilterDTO filterDTO, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetEventsByFilter(int pageNumber, int pageSize, [FromQuery] EventFilterDTO filterDTO, CancellationToken cancellationToken = default)
         {
-            var query = new GetEventsByFilterQuery(filterDTO);
+            var query = new GetEventsByFilterQuery(pageNumber, pageSize, filterDTO);
             var result = await _mediator.Send(query);
             return Ok(result);
         }

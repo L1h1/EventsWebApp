@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -34,6 +35,11 @@ namespace EventsWebApp.Application.Queries.User.GetUserByIdQuery
             }
 
             var user = await _userRepository.GetByIdAsync(request.id);
+
+            if (user == null)
+            {
+                throw new NotFoundException("User with given Id does not exist.");
+            }
 
             return _mapper.Map<UserResponseDTO>(user);
         }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -39,6 +40,11 @@ namespace EventsWebApp.Application.Queries.Event.GetEventByIdQuery
                 query => query.Include(e => e.EventCategory),
                 cancellationToken
                 );
+
+            if (rawData == null)
+            {
+                throw new NotFoundException("Event with given Id does not exist.");
+            }
 
             return _mapper.Map<EventResponseDTO>(rawData);
         }

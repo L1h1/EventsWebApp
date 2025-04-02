@@ -16,6 +16,7 @@ namespace EventsWebApp.Infrastructure.EntityConfigurations
             builder.HasKey(c => c.Id);
 
             builder.HasIndex(c => c.Id).IsUnique();
+            builder.HasIndex(c => c.Name).IsUnique();
 
             builder.Property(c => c.Name).IsRequired().HasMaxLength(64);
         }

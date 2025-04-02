@@ -9,5 +9,6 @@ namespace EventsWebApp.Domain.Interfaces
 {
     public interface IEventCategoryRepository : IBaseRepository<EventCategory>
     {
+        Task<EventCategory> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     }
 }

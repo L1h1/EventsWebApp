@@ -1,6 +1,7 @@
 ﻿using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Infrastructure.Data;
+using EventsWebApp.Shared.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace EventsWebApp.Infrastructure.Repositories
     {
         public EventRepository(AppDbContext appDbContext) : base(appDbContext) { }
 
-        public async Task<IEnumerable<Event>> GetByFilterAsync(
+        public async Task<PaginatedDTO<Event>> GetByFilterAsync(
+            int pageNumber,
+            int pageSize,
             DateTime? eventDateAndTime = null,
             string eventAddress = null,
             Guid? categoryId = null,
@@ -32,7 +35,19 @@ namespace EventsWebApp.Infrastructure.Repositories
             if (categoryId != null)
                 query = query.Where(e => e.EventCategoryId == categoryId.Value);
 
-            return await query.ToListAsync(cancellationToken);
+            var totalCount = await query.CountAsync(cancellationToken);
+            var items = await query
+                .Skip(pageNumber - 1)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedDTO<Event>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<Event> GetByNameAsync(string name, CancellationToken cancellationToken = default)

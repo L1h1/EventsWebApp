@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
+using EventsWebApp.Application.Exceptions;
 using EventsWebApp.Domain.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -38,6 +39,11 @@ namespace EventsWebApp.Application.Queries.Event.GetEventByNameQuery
                 request.eventName,
                 cancellationToken
                 );
+
+            if (rawData == null)
+            {
+                throw new NotFoundException("Event with given name does not exist.");
+            }
 
             return _mapper.Map<EventResponseDTO>(rawData);
         }
