@@ -14,6 +14,5 @@ namespace EventsWebApp.Application.DTOs
         public string EventAddress { get; set; }
         public Guid EventCategoryId { get; set; }
         public int MaxParticipantCount { get; set; }
-        public string ImagePath { get; set; }
     }
 }

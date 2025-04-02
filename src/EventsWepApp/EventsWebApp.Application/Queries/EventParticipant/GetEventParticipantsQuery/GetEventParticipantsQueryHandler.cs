@@ -2,6 +2,7 @@
 using EventsWebApp.Application.DTOs;
 using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Shared.DTO;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,16 +16,25 @@ namespace EventsWebApp.Application.Queries.EventParticipant.GetEventParticipants
     public class GetEventParticipantsQueryHandler : IRequestHandler<GetEventParticipantsQuery, PaginatedDTO<EventParticipantResponseDTO>>
     {
         private readonly IMapper _mapper;
+        private readonly IValidator<GetEventParticipantsQuery> _validator;
         private readonly IEventParticipantRepository _eventParticipantRepository;
 
-        public GetEventParticipantsQueryHandler(IMapper mapper, IEventParticipantRepository repository)
+        public GetEventParticipantsQueryHandler(IMapper mapper, IEventParticipantRepository repository, IValidator<GetEventParticipantsQuery> validator)
         {
             _mapper = mapper;
+            _validator = validator;
             _eventParticipantRepository = repository;
         }
 
         public async Task<PaginatedDTO<EventParticipantResponseDTO>> Handle(GetEventParticipantsQuery request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var paginatedData = await _eventParticipantRepository.GetAllASync(
                 request.pageNumber,
                 request.pageSize,

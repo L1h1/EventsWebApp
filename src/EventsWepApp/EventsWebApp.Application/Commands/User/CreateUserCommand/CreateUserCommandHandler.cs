@@ -2,6 +2,7 @@
 using EventsWebApp.Application.DTOs;
 using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,27 @@ namespace EventsWebApp.Application.Commands.User.CreateUserCommand
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<CreateUserCommand> _validator;
 
-        public CreateUserCommandHandler(IMapper mapper, IUserRepository userRepository)
+        public CreateUserCommandHandler(
+            IMapper mapper,
+            IUserRepository userRepository,
+            IValidator<CreateUserCommand> validator)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _validator = validator;
         }
 
         public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var newUser = _mapper.Map<Domain.Entities.User>(request.requestDTO);
             newUser.Role = Domain.Enums.UserRole.User;
 

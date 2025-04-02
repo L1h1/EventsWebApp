@@ -1,4 +1,5 @@
 ﻿using EventsWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,26 @@ namespace EventsWebApp.Application.Commands.EventParticipant.DeleteEventParticip
 {
     public class DeleteEventParticipantCommandHandler : IRequestHandler<DeleteEventParticipantCommand, Unit>
     {
+        private readonly IValidator<DeleteEventParticipantCommand> _validator;
         private readonly IEventParticipantRepository _eventParticipantRepository;
 
-        public DeleteEventParticipantCommandHandler(IEventParticipantRepository eventParticipantRepository)
+        public DeleteEventParticipantCommandHandler(
+            IEventParticipantRepository eventParticipantRepository,
+            IValidator<DeleteEventParticipantCommand> validator)
         {
+            _validator = validator;
             _eventParticipantRepository = eventParticipantRepository;
         }
 
         public async Task<Unit> Handle(DeleteEventParticipantCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             await _eventParticipantRepository.DeleteAsync(request.id, cancellationToken);
 
             return Unit.Value;

@@ -2,6 +2,7 @@
 using EventsWebApp.Application.DTOs;
 using EventsWebApp.Domain.Entities;
 using EventsWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,27 @@ namespace EventsWebApp.Application.Commands.EventCategory.CreateEventCategoryCom
     {
         private readonly IMapper _mapper;
         private readonly IEventCategoryRepository _eventCategoryRepository;
+        private readonly IValidator<CreateEventCategoryCommand> _validator;
 
-        public CreateEventCategoryCommandHandler(IMapper mapper, IEventCategoryRepository eventCategoryRepository)
+        public CreateEventCategoryCommandHandler(
+            IMapper mapper,
+            IEventCategoryRepository eventCategoryRepository,
+            IValidator<CreateEventCategoryCommand> validator)
         {
             _mapper = mapper;
             _eventCategoryRepository = eventCategoryRepository;
+            _validator = validator;
         }
 
         public async Task<EventCategoryResponseDTO> Handle(CreateEventCategoryCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var newCategory = new Domain.Entities.EventCategory
             {
                 Name = request.name

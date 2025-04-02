@@ -31,6 +31,9 @@ namespace EventsWebApp.Infrastructure.EntityConfigurations
             builder.Property(e=>e.EventDateAndTime).IsRequired();
             builder.Property(e=>e.EventAddress).IsRequired().HasMaxLength(128);
             builder.Property(e=>e.MaxParticipantCount).IsRequired();
+
+            builder.Property(e => e.ImagePath)
+              .HasComputedColumnSql("'photos/events/' || CAST(id AS TEXT)");
         }
     }
 }

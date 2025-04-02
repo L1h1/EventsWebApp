@@ -2,6 +2,7 @@
 using EventsWebApp.Application.DTOs;
 using EventsWebApp.Domain.Interfaces;
 using EventsWebApp.Shared.DTO;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,24 @@ namespace EventsWebApp.Application.Queries.User.GetUsersQuery
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<GetUsersQuery> _validator;
 
-        public GetUsersQueryHandler(IMapper mapper, IUserRepository userRepository)
+        public GetUsersQueryHandler(IMapper mapper, IUserRepository userRepository, IValidator<GetUsersQuery> validator)
         {
             _mapper = mapper;
+            _validator = validator;
             _userRepository = userRepository;
         }
 
         public async Task<PaginatedDTO<UserResponseDTO>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var paginatedData = await _userRepository.GetAllASync(
                 request.pageNumber,
                 request.pageSize,

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventsWebApp.Application.DTOs;
 using EventsWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,24 @@ namespace EventsWebApp.Application.Commands.Event.CreateEventCommand
     {
         private readonly IMapper _mapper;
         private readonly IEventRepository _eventRepository;
+        private readonly IValidator<CreateEventCommand> _validator;
 
-        public CreateEventCommandHandler(IMapper mapper, IEventRepository eventRepository)
+        public CreateEventCommandHandler(IMapper mapper, IEventRepository eventRepository, IValidator<CreateEventCommand> validator)
         {
             _mapper = mapper;
+            _validator = validator;
             _eventRepository = eventRepository;
         }
 
         public async Task<EventResponseDTO> Handle(CreateEventCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var newEvent = _mapper.Map<Domain.Entities.Event>(request.eventDTO);
 
             await _eventRepository.AddAsync(newEvent, cancellationToken);
