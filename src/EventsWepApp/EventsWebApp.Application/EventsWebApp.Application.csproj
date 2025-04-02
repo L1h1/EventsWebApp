@@ -15,15 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Event\" />
-    <Folder Include="Commands\EventCategory\" />
-    <Folder Include="Commands\EventParticipant\" />
-    <Folder Include="Mapping\" />
+    <ProjectReference Include="..\EventsWebApp.Domain\EventsWebApp.Domain.csproj" />
+    <ProjectReference Include="..\EventsWebApp.Shared\EventsWebApp.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventsWebApp.Domain\EventsWebApp.Domain.csproj" />
-    <ProjectReference Include="..\EventsWebApp.Shared\EventsWebApp.Shared.csproj" />
+    <Folder Include="Commands\User\LoginUserCommand\" />
   </ItemGroup>
 
 </Project>

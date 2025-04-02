@@ -26,7 +26,7 @@ namespace EventsWebApp.Application.Commands.Event.UpdateEventCommand
             var existingEvent = await _eventRepository.GetByIdAsync(request.id, cancellationToken: cancellationToken);
 
             _mapper.Map(request.requestDTO, existingEvent);
-            await _eventRepository.UpdateAsync(existingEvent, cancellationToken);
+            existingEvent = await _eventRepository.UpdateAsync(existingEvent, cancellationToken);
 
             return _mapper.Map<EventResponseDTO>(existingEvent);
         }

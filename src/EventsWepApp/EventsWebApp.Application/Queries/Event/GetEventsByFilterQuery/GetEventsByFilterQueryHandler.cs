@@ -24,9 +24,9 @@ namespace EventsWebApp.Application.Queries.Event.GetEventsByFilterQuery
         public async Task<IEnumerable<EventResponseDTO>> Handle(GetEventsByFilterQuery request, CancellationToken cancellationToken)
         {
             var rawData = await _eventRepository.GetByFilterAsync(
-                request.eventDateAndTime,
-                request.eventAddress,
-                request.categoryId,
+                request.filterDTO.EventDateAndTime,
+                request.filterDTO.EventAddress,
+                request.filterDTO.CategoryId,
                 cancellationToken
                 );
 
