@@ -30,7 +30,7 @@ namespace EventsWebApp.Infrastructure.Repositories
                 query = query.Where(e => e.EventDateAndTime == eventDateAndTime.Value);
 
             if (!string.IsNullOrEmpty(eventAddress))
-                query = query.Where(e => e.EventAddress == eventAddress);
+                query = query.Where(e => e.EventAddress.Contains(eventAddress));
 
             if (categoryId != null)
                 query = query.Where(e => e.EventCategoryId == categoryId.Value);
