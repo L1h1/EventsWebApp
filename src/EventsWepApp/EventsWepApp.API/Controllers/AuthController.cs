@@ -1,5 +1,6 @@
 ﻿using EventsWebApp.Application.Commands.User.CreateUserCommand;
 using EventsWebApp.Application.Commands.User.LoginUserCommand;
+using EventsWebApp.Application.Commands.User.LoginUserWithRefreshCommand;
 using EventsWebApp.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.BearerToken;
@@ -31,7 +32,15 @@ namespace EventsWepApp.API.Controllers
         {
             var command = new LoginUserCommand(loginDTO);
             var result = await _mediator.Send(command, cancellationToken);
-            return Ok( new { AccessToken = result });
+            return Ok(result);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> LoginUserWithRefreshToken([FromBody] string refreshToken, CancellationToken cancellationToken = default)
+        {
+            var command = new LoginUserWithRefreshCommand(refreshToken);
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
         }
     }
 }

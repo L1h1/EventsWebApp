@@ -29,6 +29,7 @@ namespace EventsWebApp.Infrastructure
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();
             services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IPhotoService,PhotoService>();
             services.AddScoped<ITokenService, TokenService>();
 

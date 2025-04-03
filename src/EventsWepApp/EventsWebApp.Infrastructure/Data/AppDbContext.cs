@@ -17,6 +17,7 @@ namespace EventsWebApp.Infrastructure.Data
         public DbSet<EventCategory> EventCategories { get; set; }
         public DbSet<EventParticipant> EventParticipants { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

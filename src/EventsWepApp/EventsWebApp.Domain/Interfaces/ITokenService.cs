@@ -9,6 +9,7 @@ namespace EventsWebApp.Domain.Interfaces
 {
     public interface ITokenService
     {
-        Task<string> CreateAccessToken(User user, CancellationToken cancellationToken = default);
+        string CreateAccessToken(User user, CancellationToken cancellationToken = default);
+        Tuple<string,int> CreateRefreshToken(CancellationToken cancellationToken = default);
     }
 }

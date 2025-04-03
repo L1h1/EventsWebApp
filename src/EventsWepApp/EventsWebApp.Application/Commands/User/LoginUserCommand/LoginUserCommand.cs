@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace EventsWebApp.Application.Commands.User.LoginUserCommand
 {
-    public sealed record LoginUserCommand(UserLoginDTO loginDTO) : IRequest<string>;
+    public sealed record LoginUserCommand(UserLoginDTO loginDTO) : IRequest<LoginResponseDTO>;
 }
