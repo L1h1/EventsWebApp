@@ -2,6 +2,7 @@
 using EventsWebApp.Application.Commands.EventCategory.DeleteEventCategoryCommand;
 using EventsWebApp.Application.Queries.EventCategory.GetEventCategoriesQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -26,6 +27,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateEventCategory(string name, CancellationToken cancellationToken = default)
         {
             var command = new CreateEventCategoryCommand(name);
@@ -34,6 +36,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteEventCategory(Guid id, CancellationToken cancellationToken = default)
         {
             var command = new DeleteEventCategoryCommand(id);

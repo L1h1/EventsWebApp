@@ -56,6 +56,12 @@ namespace EventsWebApp.Application.Commands.EventParticipant.CreateEventParticip
                 throw new NotFoundException("User with given Id does not exist.");
             }
 
+            var alreadyParticipates = await _eventParticipantRepository.CheckParticipation(request.requestDTO.UserId, request.requestDTO.EventId, cancellationToken);
+            if (alreadyParticipates)
+            {
+                throw new BadRequestException("This user already participates in given event.");
+            }
+
             var newParticipant = _mapper.Map<Domain.Entities.EventParticipant>(request.requestDTO);
             newParticipant.RegistrationDate = DateOnly.FromDateTime(DateTime.Now);
 

@@ -1,6 +1,8 @@
 ﻿using EventsWebApp.Application.Commands.User.CreateUserCommand;
+using EventsWebApp.Application.Commands.User.LoginUserCommand;
 using EventsWebApp.Application.DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -22,6 +24,14 @@ namespace EventsWepApp.API.Controllers
             var command = new CreateUserCommand(requestDTO);
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(new { message = "Registration successful" });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginDTO loginDTO, CancellationToken cancellationToken = default)
+        {
+            var command = new LoginUserCommand(loginDTO);
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok( new { AccessToken = result });
         }
     }
 }

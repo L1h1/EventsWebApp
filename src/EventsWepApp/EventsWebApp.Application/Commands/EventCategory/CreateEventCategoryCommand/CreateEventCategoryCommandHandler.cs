@@ -38,7 +38,7 @@ namespace EventsWebApp.Application.Commands.EventCategory.CreateEventCategoryCom
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var existingCategory = _eventCategoryRepository.GetByNameAsync(request.name, cancellationToken);
+            var existingCategory = await _eventCategoryRepository.GetByNameAsync(request.name, cancellationToken);
             if (existingCategory != null)
             {
                 throw new BadRequestException("Event category with given name already exists.");

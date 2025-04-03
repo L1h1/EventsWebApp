@@ -4,6 +4,7 @@ using EventsWebApp.Application.DTOs;
 using EventsWebApp.Application.Queries.EventParticipant.GetEventParticipantByIdQuery;
 using EventsWebApp.Application.Queries.EventParticipant.GetEventParticipantsQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -28,6 +29,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpGet("event/{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetEventParticipants(Guid id, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
             var query = new GetEventParticipantsQuery(id, pageNumber, pageSize);
@@ -36,6 +38,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "UserOrAdminPolicy")]
         public async Task<IActionResult> CreateEventParticipant([FromBody] EventParticipantRequestDTO requestDTO, CancellationToken cancellationToken = default)
         {
             var command = new CreateEventParticipantCommand(requestDTO);
@@ -44,6 +47,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "UserOrAdminPolicy")]
         public async Task<IActionResult> DeleteEventParticipant(Guid id, CancellationToken cancellationToken = default)
         {
             var command = new DeleteEventParticipantCommand(id);

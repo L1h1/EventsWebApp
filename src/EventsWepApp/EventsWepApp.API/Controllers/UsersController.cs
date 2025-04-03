@@ -1,6 +1,7 @@
 ﻿using EventsWebApp.Application.Queries.User.GetUserByIdQuery;
 using EventsWebApp.Application.Queries.User.GetUsersQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -17,6 +18,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetAllUsers(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
             var query = new GetUsersQuery(pageNumber, pageSize);
@@ -25,6 +27,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpGet("id")]
+        [Authorize(Policy = "UserOrAdminPolicy")]
         public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken = default)
         {
             var query = new GetUserByIdQuery(id);

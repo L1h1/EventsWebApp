@@ -1,6 +1,7 @@
 ﻿using EventsWebApp.Application.Commands.Event.UploadEventPhotoCommand;
 using EventsWebApp.Application.Queries.Event.GetEventPhotoQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -26,6 +27,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpPost("events/{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UploadEventPhoto(Guid id, IFormFile file, CancellationToken cancellationToken = default)
         {
             var command = new UploadEventPhotoCommand(id, file);

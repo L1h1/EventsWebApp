@@ -7,6 +7,7 @@ using EventsWebApp.Application.Queries.Event.GetEventByNameQuery;
 using EventsWebApp.Application.Queries.Event.GetEventsByFilterQuery;
 using EventsWebApp.Application.Queries.Event.GetEventsQuery;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsWepApp.API.Controllers
@@ -55,6 +56,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> CreateEvent([FromBody] EventRequestDTO requestDTO, CancellationToken cancellationToken = default)
         {
             var command = new CreateEventCommand(requestDTO);
@@ -63,6 +65,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] EventRequestDTO requestDTO, CancellationToken cancellationToken = default)
         {
             var command = new UpdateEventCommand(id, requestDTO);
@@ -71,6 +74,7 @@ namespace EventsWepApp.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteEvent(Guid id, CancellationToken cancellationToken = default)
         {
             var command = new DeleteEventCommand(id);

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EventsWebApp.Domain.Interfaces
 {
-    public interface IEventParticipantRepository : IBaseRepository<EventParticipant>
+    public interface ITokenService
     {
-        Task<bool> CheckParticipation(Guid userId, Guid eventId, CancellationToken cancellationToken = default); 
+        Task<string> CreateAccessToken(User user, CancellationToken cancellationToken = default);
     }
 }

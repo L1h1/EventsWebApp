@@ -1,19 +1,22 @@
 using EventsWebApp.Application;
 using EventsWebApp.Infrastructure;
+using EventsWepApp.API;
 using EventsWepApp.API.Middleware;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddJWTAuthentication(builder.Configuration);
+builder.Services.AddAuthorizationPolicies();
 
 builder.Services.AddResponseCaching();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 
@@ -29,6 +32,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseResponseCaching();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
