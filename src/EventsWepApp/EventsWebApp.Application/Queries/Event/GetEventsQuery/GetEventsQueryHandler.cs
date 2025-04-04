@@ -39,7 +39,10 @@ namespace EventsWebApp.Application.Queries.Event.GetEventsQuery
             var paginatedData = await _eventRepository.GetAllASync(
                 request.pageNumber,
                 request.pageSize,
-                query=>query.Include(e=>e.EventCategory),
+                query=>query
+                    .Include(e=>e.EventCategory)
+                    .Include(e => e.Participants)
+                        .ThenInclude(p => p.User),
                 cancellationToken
                 );
 

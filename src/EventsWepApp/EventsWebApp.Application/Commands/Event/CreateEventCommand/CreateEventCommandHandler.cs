@@ -49,6 +49,7 @@ namespace EventsWebApp.Application.Commands.Event.CreateEventCommand
             }
 
             var newEvent = _mapper.Map<Domain.Entities.Event>(request.eventDTO);
+            newEvent.EventCategory = existingCategory;
 
             await _eventRepository.AddAsync(newEvent, cancellationToken);
 

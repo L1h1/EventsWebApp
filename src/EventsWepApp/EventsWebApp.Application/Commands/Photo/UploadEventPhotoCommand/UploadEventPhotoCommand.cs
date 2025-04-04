@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventsWebApp.Application.Commands.Event.UploadEventPhotoCommand
+namespace EventsWebApp.Application.Commands.Photo.UploadEventPhotoCommand
 {
     public sealed record UploadEventPhotoCommand(Guid eventId, IFormFile file) : IRequest<Unit>;
 }

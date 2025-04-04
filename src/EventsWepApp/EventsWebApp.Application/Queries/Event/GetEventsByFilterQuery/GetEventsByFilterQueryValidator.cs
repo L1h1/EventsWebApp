@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace EventsWebApp.Application.Queries.Event.GetEventsByFilterQuery
 {
-    public class GetEventsByFilterValidator : AbstractValidator<GetEventsByFilterQuery>
+    public class GetEventsByFilterQueryValidator : AbstractValidator<GetEventsByFilterQuery>
     {
-        public GetEventsByFilterValidator()
+        public GetEventsByFilterQueryValidator()
         {
             RuleFor(c => c.pageNumber).NotEmpty().GreaterThan(0);
             RuleFor(c => c.pageSize).NotEmpty().GreaterThan(0);

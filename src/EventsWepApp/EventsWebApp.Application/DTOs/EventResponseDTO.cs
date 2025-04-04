@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventsWebApp.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace EventsWebApp.Application.DTOs
         public string EventAddress { get; set; }
         public string CategoryName { get; set; }
         public int MaxParticipantCount { get; set; }
+        public IEnumerable<EventParticipantResponseDTO> Participants { get; set; }
         public string ImagePath { get; set; }
     }
 }

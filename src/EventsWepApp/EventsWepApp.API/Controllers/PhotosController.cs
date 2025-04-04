@@ -1,5 +1,5 @@
-﻿using EventsWebApp.Application.Commands.Event.UploadEventPhotoCommand;
-using EventsWebApp.Application.Queries.Event.GetEventPhotoQuery;
+﻿using EventsWebApp.Application.Commands.Photo.UploadEventPhotoCommand;
+using EventsWebApp.Application.Queries.Photo.GetEventPhotoQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

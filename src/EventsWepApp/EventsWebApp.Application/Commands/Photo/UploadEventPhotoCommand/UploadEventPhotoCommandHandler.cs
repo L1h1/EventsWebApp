@@ -7,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventsWebApp.Application.Queries.Event.GetEventPhotoQuery
+namespace EventsWebApp.Application.Commands.Photo.UploadEventPhotoCommand
 {
-    internal class GetEventPhotoQueryHandler : IRequestHandler<GetEventPhotoQuery, Stream>
+    public class UploadEventPhotoCommandHandler : IRequestHandler<UploadEventPhotoCommand, Unit>
     {
         private readonly IPhotoService _photoService;
-        private readonly IValidator<GetEventPhotoQuery> _validator;
+        private readonly IValidator<UploadEventPhotoCommand> _validator;
 
-        public GetEventPhotoQueryHandler(IPhotoService photoService, IValidator<GetEventPhotoQuery> validator)
+        public UploadEventPhotoCommandHandler(IPhotoService photoService, IValidator<UploadEventPhotoCommand> validator)
         {
             _validator = validator;
             _photoService = photoService;
         }
 
-        public async Task<Stream> Handle(GetEventPhotoQuery request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UploadEventPhotoCommand request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
@@ -29,7 +29,9 @@ namespace EventsWebApp.Application.Queries.Event.GetEventPhotoQuery
                 throw new ValidationException(validationResult.Errors);
             }
 
-            return await _photoService.GetPhoto(request.id);
+            await _photoService.UploadPhoto(request.eventId, request.file.OpenReadStream());
+
+            return Unit.Value;
         }
     }
 }

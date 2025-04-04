@@ -24,7 +24,10 @@ namespace EventsWebApp.Infrastructure.Repositories
             Guid? categoryId = null,
             CancellationToken cancellationToken = default)
         {
-            IQueryable<Event> query = _dbSet.Include(e=>e.EventCategory);
+            IQueryable<Event> query = _dbSet
+                .Include(e=>e.EventCategory)
+                .Include(e => e.Participants)
+                    .ThenInclude(p => p.User);
 
             if (eventDateAndTime != null)
                 query = query.Where(e => e.EventDateAndTime == eventDateAndTime.Value);
@@ -52,7 +55,11 @@ namespace EventsWebApp.Infrastructure.Repositories
 
         public async Task<Event> GetByNameAsync(string name, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.Include(e=>e.EventCategory).FirstOrDefaultAsync(e=>e.Name == name, cancellationToken);
+            return await _dbSet
+                .Include(e=>e.EventCategory)
+                .Include(e=>e.Participants)
+                    .ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(e=>e.Name == name, cancellationToken);
         }
     }
 }

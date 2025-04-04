@@ -56,7 +56,9 @@ namespace EventsWebApp.Application.Commands.Event.UpdateEventCommand
             }
 
             _mapper.Map(request.requestDTO, existingEvent);
-            existingEvent = await _eventRepository.UpdateAsync(existingEvent, cancellationToken);
+            existingEvent.EventCategory = existingCategory;
+            await _eventRepository.UpdateAsync(existingEvent, cancellationToken);
+            
 
             return _mapper.Map<EventResponseDTO>(existingEvent);
         }

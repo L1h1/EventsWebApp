@@ -37,7 +37,10 @@ namespace EventsWebApp.Application.Queries.Event.GetEventByIdQuery
 
             var rawData = await _eventRepository.GetByIdAsync(
                 request.eventId,
-                query => query.Include(e => e.EventCategory),
+                query => query
+                    .Include(e => e.EventCategory)
+                    .Include(e => e.Participants)
+                        .ThenInclude(p=>p.User),
                 cancellationToken
                 );
 
