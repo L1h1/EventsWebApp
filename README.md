@@ -46,4 +46,5 @@ For testing purposes there're two user accounts:
 2. User (user@gmail.com : 123456)
 
 Use the credentials above in POST auth/login endpoint to get the access and refresh tokens.<br>
-Then pass the access token to "Authorize" menu to pass through the auth policy.
+Then pass the access token to "Authorize" menu to pass through the auth policy.<br>
+To start project from IDE change appsettings.json by removing **/app/** in<br> **"SqliteConnection": "Data Source = /app/EventWebApp.db"**
