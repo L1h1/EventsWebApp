@@ -12,33 +12,32 @@ A REST API for event management built with ASP.NET Core 8.0, featuring:
 - [Docker](https://www.docker.com/get-started)
 
 ### 1. Create the container
-
+Navigate to your solution root directory (where .sln file is located)
 ```bash
-# Navigate to your solution root directory (where .sln file is located)
 cd path/to/your/solution
 ```
+Build with proper context
 ```bash
-# Build with proper context
 docker build -t events-api -f EventsWepApp.API/Dockerfile .
 ```
 ### 2. Container management
+To run a new container use
 ```bash 
-# To run a new container use
 docker run -p 8080:8080 --name events-container events-api
 ```
+To stop the container use
 ```bash
-# To stop the container use
 docker container stop events-container
 ```
+To restart the container use
 ```bash
-# To restart the container use
 docker container restart events-container
 ```
 
 
 ### 3. Open web site
+Visit this link
 ```bash
-# Visit this link
 http://localhost:8080/swagger/
 ```
 For testing purposes there're two user accounts:
@@ -47,4 +46,3 @@ For testing purposes there're two user accounts:
 
 Use the credentials above in POST auth/login endpoint to get the access and refresh tokens.<br>
 Then pass the access token to "Authorize" menu to pass through the auth policy.<br>
-To start project from IDE change appsettings.json by removing **/app/** in<br> **"SqliteConnection": "Data Source = /app/EventWebApp.db"**
